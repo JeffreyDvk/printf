@@ -1,7 +1,8 @@
-.TH man 1 "17 April 2022" "0.1" "Custom _printf function"
+.TH _PRINTF 3 "18/4/2022" "0.1" "ALX  - _printf"
+
 .SH NAME
-.B _printf - an implementation of _printf function
--
+.B _printf\fR \- formatted output conversion
+
 .SH SYNOPSIS
 .B #include \fB"main.h"
 
@@ -138,7 +139,7 @@ The \fIint\fR argument is converted to signed decimal notation.
 The \fIunsigned int\fR argument is converted to binary.
 .in
 .RE
-OAOAOA
+
 .RS
 .B o, u, x, X
 .in +2n
@@ -220,7 +221,7 @@ Francisco, CA 94103", followed by a new line, where \fIstreet\fR, \fIcity\fR,
 and \fIstate\fR are pointers to strings:
 
 .RS
-#include "holberton.h"
+#include "main.h"
 
 int main(void)
 
@@ -258,7 +259,7 @@ To print the values of LONG_MAX and LONG_MIN aligned and
 left-justified with a width of 30:
 
 .RS
-#include "holberton.h"
+#include "main.h"
 
 #include <limits.h>
 
@@ -278,8 +279,6 @@ printf(3)
 
 The \fB_printf()\fR function emulates functionality of the C standard library 
 function \fBprintf()\fR. This man page borrows from the corresponding Linux 
-man page printf(3).
-
-
+man page printf(3)
 .SH AUTHOR
-Eyob Alamerew, Nebil Abdulfetah
+Abdihakim Abdirahman & Mohamed Abeid
