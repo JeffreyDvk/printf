@@ -1,77 +1,90 @@
+#include <stddef.h>
 #include "main.h"
+#include <unistd.h>
 #include <stdlib.h>
-#include <stdarg.h>
-
+#include <stdio.h>
 /**
- * print_op - function to check which specifier to print
- * @format: string being passed
- * @print_arr: array of struct ops
- * @list: list of arguments to print
- * Return: numb of char to be printed
+ * printIdentifiers - prints special characters
+ * @next: character after the %
+ * @arg: argument for the indentifier
+ * Return: the number of characters printed
+ * (excluding the null byte used to end output to strings)
  */
+int printIdentifiers(char next, va_list arg)
+{
+	int functsIndex;
 
-int print_op(const char *format, fmt_t *print_arr, va_list list)
-{
-char a;
-int count = 0, b = 0, c = 0;
-a = format[b];
-while (a != '\0')
-{
-if (a == '%')
-{
-c = 0;
-b++;
-a = format[b];
-while (print_arr[c].type != NULL &&
-a != *(print_arr[c].type))
-c++;
-if (print_arr[c].type != NULL)
-count = count + print_arr[c].f(list);
-else
-{
-if (a == '\0')
-return (-1);
-if (a != '%')
-count += _putchar('%');
-count += _putchar(a);
-}
-}
-else
-count += _putchar(a);
-b++;
-a = format[b];
-}
-return (count);
-}
+	identifierStruct functs[] = {
+		{"c", print_char},
+		{"s", print_str},
+		{"d", print_int},
+		{"i", print_int},
+		{"u", print_unsigned},
+		{"b", print_unsignedToBinary},
+		{"o", print_oct},
+		{"x", print_hex},
+		{"X", print_HEX},
+		{"S", print_STR},
+		{NULL, NULL}
+	};
 
+	for (functsIndex = 0; functs[functsIndex].indentifier != NULL; functsIndex++)
+	{
+		if (functs[functsIndex].indentifier[0] == next)
+			return (functs[functsIndex].printer(arg));
+	}
+	return (0);
+}
 /**
- * _printf - prints output according to format
- * @format: string being passed
- * Return: char to be printed
+ * _printf - mimic printf from stdio
+ * Description: produces output according to a format
+ * write output to stdout, the standard output stream
+ * @format: character string composed of zero or more directives
+ * Return: the number of characters printed
+ * (excluding the null byte used to end output to strings)
+ * return -1 for incomplete identifier error
  */
 
 int _printf(const char *format, ...)
 {
-va_list list;
-int a = 0;
-fmt_t ops[] = {
-{"c", ch},
-{"s", str},
-{"d", _int},
-{"b", _bin},
-{"i", _int},
-{"u", _ui},
-{"o", _oct},
-{"x", _hex_l},
-{"X", _hex_u},
-{"R", _rot13},
-{"r", _rot13},
-{NULL, NULL}
-};
-if (format == NULL)
-return (-1);
-va_start(list, format);
-a = print_op(format, ops, list);
-va_end(list);
-return (a);
+	unsigned int i;
+	int identifierPrinted = 0, charPrinted = 0;
+	va_list arg;
+
+	va_start(arg, format);
+	if (format == NULL)
+		return (-1);
+
+	for (i = 0; format[i] != '\0'; i++)
+	{
+		if (format[i] != '%')
+		{
+			_putchar(format[i]);
+			charPrinted++;
+			continue;
+		}
+		if (format[i + 1] == '%')
+		{
+			_putchar('%');
+			charPrinted++;
+			i++;
+			continue;
+		}
+		if (format[i + 1] == '\0')
+			return (-1);
+
+		identifierPrinted = printIdentifiers(format[i + 1], arg);
+		if (identifierPrinted == -1 || identifierPrinted != 0)
+			i++;
+		if (identifierPrinted > 0)
+			charPrinted += identifierPrinted;
+
+		if (identifierPrinted == 0)
+		{
+			_putchar('%');
+			charPrinted++;
+		}
+	}
+	va_end(arg);
+	return (charPrinted);
 }
