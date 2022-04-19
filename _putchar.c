@@ -1,9 +1,9 @@
-#include <unistd.h>
+#include "main.h"
 
 /**
- * _putchar - writes a charactor to c
- * @c: charector to write to stdou
- * Return: on success 0.
+ * _putchar - function to print char
+ * @c: char being passed
+ * Return: returning char
  */
 int _putchar(char c)
 {
